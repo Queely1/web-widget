@@ -2,7 +2,6 @@ import './App.css';
 import { sources } from "./source";
 import {useState} from "react";
 import {ByFilter} from "./ByFilter";
-import {ByName} from "./ByName";
 import {Variables} from "./Variables";
 
 const foWithMoList = [];
@@ -55,7 +54,6 @@ sources.forEach(line => {
 console.log(foWithMoList);
 
 export const App = () => {
-  const [type, setType] = useState('byFilter');
   const [state, setState] = useState(foWithMoList);
   const [variables, setVariables] = useState([
     {
@@ -92,18 +90,10 @@ export const App = () => {
   })
 
   return (
-    <div>
+    <div className="main-container">
       <h2>Загрузка данных по муниципальным образованиям</h2>
       <h3>Выберите наблюдения (муниципальные образования)</h3>
-      {/*<button onClick={() => type !== 'byFilter' && setType('byFilter')}>
-        По ФО и субъекту
-      </button>
-      <button onClick={() => type !== 'byName' && setType('byName')}>
-        По коду ОКТМО или по названию МО
-      </button>*/}
-      {/*{type === 'byFilter' && <ByFilter allSelected={allSelected} setAllSelected={setAllSelected} state={state} setState={setState} />}*/}
       <ByFilter allSelected={allSelected} setAllSelected={setAllSelected} state={state} setState={setState} />
-      {type === 'byName' && <ByName allSelected={allSelected} setAllSelected={setAllSelected} state={state} setState={setState} />}
       <Variables variables={variables} setVariables={setVariables}/>
       <button className='submit' onClick={() => {
         const moList = [];
