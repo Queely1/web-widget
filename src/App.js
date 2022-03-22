@@ -95,7 +95,7 @@ export const App = () => {
       <button className='submit' onClick={() => {
         const moList = [];
         const variablesList = [];
-        state.forEach(fo => fo.subjectsList.forEach(subject => subject.moList.forEach(mo => mo.selected && moList.push(mo.name))));
+        state.forEach(fo => fo.subjectsList.forEach(subject => subject.moList.forEach(mo => mo.selected && moList.push(mo.oktmo))));
         variables.forEach(variable => variable.selected && variablesList.push(variable.label));
         setContentToShow({
           moList,
