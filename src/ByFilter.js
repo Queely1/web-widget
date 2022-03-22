@@ -27,68 +27,67 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
         })));
     };
 
-    const onFoChange = (i, own) => (e) => {
+    const onFoChange = (foName) => (e) => {
         const selected = e.target.checked;
-        const allOtherSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state[i].selected;
+        const allOtherSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state.find(el => el.name === foName).selected;
         setAllSelected(selected && allOtherSelected);
         setState(prevState => prevState.map((fo, foInd) => ({
-            ...fo,
-            selected: i === foInd ? selected : fo.selected,
-            hideVariants: own ? i === foInd ? selected : fo.selected : false,
-            subjectsList: fo.subjectsList.map(subj => ({
-                ...subj,
-                selected: i === foInd ? selected : fo.selected,
-                hideVariants: own ? i === foInd ? selected : fo.selected : false,
-                moList: subj.moList.map(mo => ({
-                    ...mo,
-                    selected: i === foInd ? selected : fo.selected,
+                ...fo,
+                selected: foName === fo.name ? selected : fo.selected,
+                subjectsList: fo.subjectsList.map(subj => ({
+                    ...subj,
+                    selected: foName === fo.name ? selected : fo.selected,
+                    moList: subj.moList.map(mo => ({
+                        ...mo,
+                        selected: foName === fo.name ? selected : fo.selected,
+                    }))
                 }))
-            }))
-        })));
+            })
+        ));
     };
 
-    const onSubjectChange = (foInd, subjectInd) => (e) => {
+    const onSubjectChange = (foName, subjectName) => (e) => {
         const selected = e.target.checked;
-        const curFo = state[foInd];
-        const curSubject = curFo.subjectsList[subjectInd];
-        const allOtherSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state[foInd].selected;
+        const curFo = state.find(el => el.name === foName);
+        const curSubject = curFo.subjectsList.find(el => el.name === subjectName);
+        const allOtherSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state.find(el => el.name === foName).selected;
         const allOtherSubjectsSelected = (curFo.subjectsList.map(subject => subject.selected).filter(el => el).length === curFo.subjectsList.length - 1) && !curSubject.selected;
 
         setAllSelected(selected && allOtherSelected && allOtherSubjectsSelected);
         setState(prevState => prevState.map((fo, foCurInd) => ({
             ...fo,
-            selected: foInd === foCurInd ? allOtherSubjectsSelected && selected : fo.selected,
+            selected: foName === fo.name ? allOtherSubjectsSelected && selected : fo.selected,
             subjectsList: fo.subjectsList.map((subj, curSubjectInd) => ({
                 ...subj,
-                selected: (foInd === foCurInd) && (subjectInd === curSubjectInd) ? selected : subj.selected,
+                selected: (foName === fo.name) && (subjectName === subj.name) ? selected : subj.selected,
                 moList: subj.moList.map(mo => ({
                     ...mo,
-                    selected: (foInd === foCurInd) && (subjectInd === curSubjectInd) ? selected : subj.selected,
+                    selected: (foName === fo.name) && (subjectName === subj.name) ? selected : subj.selected,
                 }))
             }))
         })));
     };
 
-    const onMoChange = (foInd, subjectInd, moInd) => (e) => {
+    const onMoChange = (foName, subjectName, moName) => (e) => {
         const selected = e.target.checked;
-        const curFo = state[foInd];
-        const curSubject = curFo.subjectsList[subjectInd];
-        const curMo = curSubject.moList[moInd];
+        const curFo = state.find(el => el.name === foName);
+        const curSubject = curFo.subjectsList.find(el => el.name === subjectName);
+        const curMo = curSubject.moList.find(el => el.name === moName);
 
-        const allOtherFoSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state[foInd].selected;
+        const allOtherFoSelected = (state.map(fo => fo.selected).filter(el => el).length === state.length - 1) && !state.find(el => el.name === foName).selected;
         const allOtherSubjectsSelected = (curFo.subjectsList.map(subject => subject.selected).filter(el => el).length === curFo.subjectsList.length - 1) && !curSubject.selected;
         const allOtherMoSelected = (curSubject.moList.map(mo => mo.selected).filter(el => el).length === curSubject.moList.length - 1) && !curMo.selected;
 
         setAllSelected(selected && allOtherFoSelected && allOtherSubjectsSelected && allOtherMoSelected);
         setState(prevState => prevState.map((fo, foCurInd) => ({
             ...fo,
-            selected: foInd === foCurInd ? allOtherSubjectsSelected && allOtherMoSelected && selected : fo.selected,
+            selected: foName === fo.name ? allOtherSubjectsSelected && allOtherMoSelected && selected : fo.selected,
             subjectsList: fo.subjectsList.map((subj, curSubjectInd) => ({
                 ...subj,
-                selected: (foInd === foCurInd) && (subjectInd === curSubjectInd) ? selected && allOtherMoSelected : subj.selected,
+                selected: (foName === fo.name) && (subjectName === subj.name) ? selected && allOtherMoSelected : subj.selected,
                 moList: subj.moList.map((mo, curMoInd) => ({
                     ...mo,
-                    selected: (foInd === foCurInd) && (subjectInd === curSubjectInd) && (moInd === curMoInd) ? selected : mo.selected,
+                    selected: (foName === fo.name) && (subjectName === subj.name) && (moName === mo.name) ? selected : mo.selected,
                 }))
             }))
         })));
@@ -105,7 +104,7 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
                             {foToDisplay.map((fo, foInd) => (
                                 <CheckBoxLine
                                     key={fo.name}
-                                    onClick={onFoChange(foInd)}
+                                    onClick={onFoChange(fo.name)}
                                     selected={fo.selected}
                                     text={fo.name}
                                 />))}
@@ -130,7 +129,7 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
                                 <div className="check-line-container">
                                     <CheckBoxLine
                                         key={fo.name}
-                                        onClick={onFoChange(foInd)}
+                                        onClick={onFoChange(fo.name)}
                                         selected={fo.selected}
                                         text={`Все субъекты ${fo.name}`}
                                         className="sticky top-1"
@@ -138,15 +137,15 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
                                     {/*<div
                                         className={(!fo.selected && !fo.subjectsList.filter(subject => subject.selected).length && 'invisible') || ''}
                                     >*/}
-                                        {fo.subjectsList.map((subject, subjectInd) => (
-                                            <div className="check-line-container">
-                                                <CheckBoxLine
-                                                    key={fo.name + subject.name}
-                                                    onClick={onSubjectChange(foInd, subjectInd)}
-                                                    selected={subject.selected}
-                                                    text={subject.name}
-                                                />
-                                            </div>))}
+                                    {fo.subjectsList.map((subject, subjectInd) => (
+                                        <div className="check-line-container">
+                                            <CheckBoxLine
+                                                key={fo.name + subject.name}
+                                                onClick={onSubjectChange(fo.name, subject.name)}
+                                                selected={subject.selected}
+                                                text={subject.name}
+                                            />
+                                        </div>))}
                                     {/*</div>*/}
                                 </div>))}
                         </div>
@@ -170,7 +169,7 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
                                 <div className="check-line-container">
                                     <CheckBoxLine
                                         key={fo.name}
-                                        onClick={onFoChange(foInd)}
+                                        onClick={onFoChange(fo.name)}
                                         selected={fo.selected}
                                         text={`Все муниципальные образования ${fo.name}`}
                                         className="sticky top-1"
@@ -179,21 +178,21 @@ export const ByFilter = ({state, setState, allSelected, setAllSelected}) => {
                                         <div className="check-line-container">
                                             <CheckBoxLine
                                                 key={fo.name + subject.name}
-                                                onClick={onSubjectChange(foInd, subjectInd)}
+                                                onClick={onSubjectChange(fo.name, subject.name)}
                                                 selected={subject.selected}
                                                 text={subject.name}
                                                 className="sticky top-2"
                                             />
 
-                                                {subject.moList.map((mo, moInd) => (
-                                                    <div className="check-line-container">
-                                                        <CheckBoxLine
-                                                            key={fo.name + subject.name + mo.name}
-                                                            onClick={onMoChange(foInd, subjectInd, moInd)}
-                                                            selected={mo.selected}
-                                                            text={mo.moWithOktmo}
-                                                        />
-                                                    </div>))}
+                                            {subject.moList.map((mo, moInd) => (
+                                                <div className="check-line-container">
+                                                    <CheckBoxLine
+                                                        key={fo.name + subject.name + mo.name}
+                                                        onClick={onMoChange(fo.name, subject.name, mo.name)}
+                                                        selected={mo.selected}
+                                                        text={mo.moWithOktmo}
+                                                    />
+                                                </div>))}
                                         </div>))}
                                 </div>))}
                         </div>

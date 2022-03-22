@@ -11,11 +11,9 @@ sources.forEach(line => {
     foWithMoList.push({
       name: line.fo,
       selected: true,
-      hideVariants: false,
       subjectsList: [{
         name: line.subject,
         selected: true,
-        hideVariants: false,
         moList: [{
           selected: true,
           name: line.mo,
@@ -30,7 +28,6 @@ sources.forEach(line => {
       curFo.subjectsList.push({
         selected: true,
         name: line.subject,
-        hideVariants: false,
         moList: [{
           selected: true,
           name: line.mo,
@@ -51,7 +48,7 @@ sources.forEach(line => {
     }
   }
 });
-console.log(foWithMoList);
+// console.log(foWithMoList);
 
 export const App = () => {
   const [state, setState] = useState(foWithMoList);

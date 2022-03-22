@@ -1,10 +1,10 @@
 export const filterFunction = (key, list, value) => {
     switch (key) {
         case 'fo':
-            return list.filter(fo => fo.name.toLowerCase().includes(value.toLowerCase()) || !value)
+            return list.filter(fo => fo.name.toLowerCase().replaceAll(' ', '').replaceAll(' ', '').includes(value.toLowerCase().replaceAll(' ', '').replaceAll(' ', '')) || !value)
         case 'subject':
             return list.map(fo => {
-                const newSubjectsList = fo.subjectsList.filter(subject => subject.name.toLowerCase().includes(value.toLowerCase()) || !value);
+                const newSubjectsList = fo.subjectsList.filter(subject => subject.name.toLowerCase().replaceAll(' ', '').replaceAll(' ', '').includes(value.toLowerCase().replaceAll(' ', '').replaceAll(' ', '')) || !value);
                 return (newSubjectsList.length ? {
                     ...fo,
                     subjectsList: newSubjectsList
@@ -13,7 +13,7 @@ export const filterFunction = (key, list, value) => {
         case 'mo':
             return list.map(fo => {
                 const newSubjectsList = fo.subjectsList.map(subject => {
-                    const newMoList = subject.moList.filter(mo => mo.name.toLowerCase().includes(value.toLowerCase()) || !value);
+                    const newMoList = subject.moList.filter(mo => mo.name.toLowerCase().replaceAll(' ', '').replaceAll(' ', '').includes(value.toLowerCase().replaceAll(' ', '').replaceAll(' ', '')) || !value);
                     return (newMoList.length ? {
                         ...subject,
                         moList: newMoList
@@ -27,7 +27,7 @@ export const filterFunction = (key, list, value) => {
         case 'moOrOktmo':
             return list.map(fo => {
                 const newSubjectsList = fo.subjectsList.map(subject => {
-                    const newMoList = subject.moList.filter(mo => mo.name.toLowerCase().includes(value.toLowerCase()) || mo.oktmo.toLowerCase().includes(value.toLowerCase()) || !value);
+                    const newMoList = subject.moList.filter(mo => mo.name.toLowerCase().replaceAll(' ', '').replaceAll(' ', '').includes(value.toLowerCase().replaceAll(' ', '').replaceAll(' ', '')) || mo.oktmo.toLowerCase().replaceAll(' ', '').replaceAll(' ', '').includes(value.toLowerCase().replaceAll(' ', '').replaceAll(' ', '')) || !value);
                     return (newMoList.length ? {
                         ...subject,
                         moList: newMoList
